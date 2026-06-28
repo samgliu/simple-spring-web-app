@@ -1,11 +1,13 @@
 package com.example.simpleWebApp.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.simpleWebApp.model.Product;
 import com.example.simpleWebApp.repository.ProductRepo;
@@ -29,12 +31,30 @@ public class ProductService {
         return repo.findById(prodId).orElse(null);
     }
 
-    public void addProduct(Product prod) {
-        repo.save(prod);
+    public Product addProduct(Product prod, MultipartFile imagFile) throws IOException {
+        prod.setImageName(imagFile.getOriginalFilename());
+        prod.setImageType(imagFile.getContentType());
+        prod.setImageData(imagFile.getBytes());
+        return repo.save(prod);
     }
 
-    public void updateProduct(Product prod) {
-        repo.save(prod);
+    public Product updateProduct(int prodId, Product prod, MultipartFile imagFile) throws IOException {
+        prod.setId(prodId);
+
+        if (imagFile != null && !imagFile.isEmpty()) {
+            prod.setImageName(imagFile.getOriginalFilename());
+            prod.setImageType(imagFile.getContentType());
+            prod.setImageData(imagFile.getBytes());
+        } else {
+            Product existing = getProductById(prodId);
+            if (existing != null) {
+                prod.setImageName(existing.getImageName());
+                prod.setImageType(existing.getImageType());
+                prod.setImageData(existing.getImageData());
+            }
+        }
+
+        return repo.save(prod);
     }
 
     public void deleteProduct(int prodId) {
