@@ -21,12 +21,12 @@ public class ProductService {
     // new Product(102, "Canon Camera", 70000),
     // new Product(103, "Hydroflask", 70)));
 
-    public List<Product> getProducts() {
+    public List<Product> getAllProducts() {
         return repo.findAll();
     }
 
     public Product getProductById(int prodId) {
-        return repo.findById(prodId).orElse(new Product());
+        return repo.findById(prodId).orElse(null);
     }
 
     public void addProduct(Product prod) {
