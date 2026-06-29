@@ -1,8 +1,6 @@
 package com.example.simpleWebApp.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +57,10 @@ public class ProductService {
 
     public void deleteProduct(int prodId) {
         repo.deleteById(prodId);
+    }
+
+    public List<Product> searchProducts(String keyword) {
+        return repo.searchProducts(keyword);
     }
 
 }
